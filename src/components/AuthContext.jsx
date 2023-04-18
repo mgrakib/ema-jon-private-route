@@ -1,10 +1,12 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { addToDB, getDataFromLocalSotre } from '../FakeData/CommonJs';
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import app from '../FireBase/FireBase.config';
 
 
 export const AuthContextAPI = createContext(null);
 const AuthContext = ({ children }) => {
-
+	const auth = getAuth(app);
 	
     // load products data 
     const [products, setProducts] = useState([]);
@@ -74,7 +76,9 @@ const AuthContext = ({ children }) => {
 		setCart(remainingProduct);
 	}
 
-	
+	const singIn = (email, password) => {
+		return createUserWithEmailAndPassword(auth, email, password);
+	}
 
 	const AuthInfo = {
 		user,
@@ -83,6 +87,7 @@ const AuthContext = ({ children }) => {
 		cart,
 		handelClearCart,
 		handelDeleateProduct,
+		singIn,
 	};
     return (
         <AuthContextAPI.Provider value={AuthInfo}>
